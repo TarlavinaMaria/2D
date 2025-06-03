@@ -1,36 +1,36 @@
 using UnityEngine;
 
-// Автоматически добавляет необходимые компоненты к объекту, если они отсутствуют
+// РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РґРѕР±Р°РІР»СЏРµС‚ РЅРµРѕР±С…РѕРґРёРјС‹Рµ РєРѕРјРїРѕРЅРµРЅС‚С‹ Рє РѕР±СЉРµРєС‚Сѓ, РµСЃР»Рё РѕРЅРё РѕС‚СЃСѓС‚СЃС‚РІСѓСЋС‚
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(SpriteRenderer))]
 
 public class PlayerMover : MonoBehaviour
 {
-    // Параметры, настраиваемые в инспекторе Unity
-    [SerializeField] private float _speed;        // Скорость перемещения персонажа
-    [SerializeField] private float _jumpForce;   // Сила прыжка
-    [SerializeField] private float _crouchSpeed = 2f; // Скорость в приседе
+    // РџР°СЂР°РјРµС‚СЂС‹, РЅР°СЃС‚СЂР°РёРІР°РµРјС‹Рµ РІ РёРЅСЃРїРµРєС‚РѕСЂРµ Unity
+    [SerializeField] private float _speed;        // РЎРєРѕСЂРѕСЃС‚СЊ РїРµСЂРµРјРµС‰РµРЅРёСЏ РїРµСЂСЃРѕРЅР°Р¶Р°
+    [SerializeField] private float _jumpForce;   // РЎРёР»Р° РїСЂС‹Р¶РєР°
+    [SerializeField] private float _crouchSpeed = 2f; // РЎРєРѕСЂРѕСЃС‚СЊ РІ РїСЂРёСЃРµРґРµ
 
-    // Константы для осей ввода
+    // РљРѕРЅСЃС‚Р°РЅС‚С‹ РґР»СЏ РѕСЃРµР№ РІРІРѕРґР°
     private const string Horizontal = "Horizontal";
     private const string Vertical = "Vertical";
 
-    // Ссылки на компоненты
-    private Rigidbody2D _rigidbody;     // Физическое тело персонажа
-    private Animator _animator;         // Контроллер анимаций
-    private SpriteRenderer _spriteRenderer; // Визуальное отображение персонажа
-    private Vector2 _moveVector;        // Вектор движения
+    // РЎСЃС‹Р»РєРё РЅР° РєРѕРјРїРѕРЅРµРЅС‚С‹
+    private Rigidbody2D _rigidbody;     // Р¤РёР·РёС‡РµСЃРєРѕРµ С‚РµР»Рѕ РїРµСЂСЃРѕРЅР°Р¶Р°
+    private Animator _animator;         // РљРѕРЅС‚СЂРѕР»Р»РµСЂ Р°РЅРёРјР°С†РёР№
+    private SpriteRenderer _spriteRenderer; // Р’РёР·СѓР°Р»СЊРЅРѕРµ РѕС‚РѕР±СЂР°Р¶РµРЅРёРµ РїРµСЂСЃРѕРЅР°Р¶Р°
+    private Vector2 _moveVector;        // Р’РµРєС‚РѕСЂ РґРІРёР¶РµРЅРёСЏ
 
-    // Имена параметров аниматора
-    private string _floatMoveAnimation = "Speed";       // Параметр для движения
-    private string _boolJumpAnimation = "IsJumping";    // Параметр для прыжка
-    private string _triggerHurtAnimation = "Hurt";      // Параметр для получения урона
-    private string _boolCrouchAnimation = "IsCrouching"; // Параметр для приседа
+    // РРјРµРЅР° РїР°СЂР°РјРµС‚СЂРѕРІ Р°РЅРёРјР°С‚РѕСЂР°
+    private string _floatMoveAnimation = "Speed";       // РџР°СЂР°РјРµС‚СЂ РґР»СЏ РґРІРёР¶РµРЅРёСЏ
+    private string _boolJumpAnimation = "IsJumping";    // РџР°СЂР°РјРµС‚СЂ РґР»СЏ РїСЂС‹Р¶РєР°
+    private string _triggerHurtAnimation = "Hurt";      // РџР°СЂР°РјРµС‚СЂ РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ СѓСЂРѕРЅР°
+    private string _boolCrouchAnimation = "IsCrouching"; // РџР°СЂР°РјРµС‚СЂ РґР»СЏ РїСЂРёСЃРµРґР°
 
     private void Start()
     {
-        // Инициализация компонентов при старте игры
+        // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РєРѕРјРїРѕРЅРµРЅС‚РѕРІ РїСЂРё СЃС‚Р°СЂС‚Рµ РёРіСЂС‹
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _rigidbody = GetComponent<Rigidbody2D>();
@@ -38,94 +38,94 @@ public class PlayerMover : MonoBehaviour
 
     private void Update()
     {
-        // Вызов основных методов каждый кадр
-        Move();         // Обработка движения
-        HandleJump();   // Обработка прыжка
-        HandleHurt();   // Обработка получения урона
-        HandleCrouch(); // Обработка приседа
+        // Р’С‹Р·РѕРІ РѕСЃРЅРѕРІРЅС‹С… РјРµС‚РѕРґРѕРІ РєР°Р¶РґС‹Р№ РєР°РґСЂ
+        Move();         // РћР±СЂР°Р±РѕС‚РєР° РґРІРёР¶РµРЅРёСЏ
+        HandleJump();   // РћР±СЂР°Р±РѕС‚РєР° РїСЂС‹Р¶РєР°
+        HandleHurt();   // РћР±СЂР°Р±РѕС‚РєР° РїРѕР»СѓС‡РµРЅРёСЏ СѓСЂРѕРЅР°
+        HandleCrouch(); // РћР±СЂР°Р±РѕС‚РєР° РїСЂРёСЃРµРґР°
     }
 
 
-    // Метод обработки движения персонажа
+    // РњРµС‚РѕРґ РѕР±СЂР°Р±РѕС‚РєРё РґРІРёР¶РµРЅРёСЏ РїРµСЂСЃРѕРЅР°Р¶Р°
     private void Move()
     {
-        // Получаем ввод с клавиатуры
+        // РџРѕР»СѓС‡Р°РµРј РІРІРѕРґ СЃ РєР»Р°РІРёР°С‚СѓСЂС‹
         _moveVector.x = Input.GetAxis(Horizontal);
         _moveVector.y = Input.GetAxis(Vertical);
 
-        // Применяем скорость к Rigidbody
+        // РџСЂРёРјРµРЅСЏРµРј СЃРєРѕСЂРѕСЃС‚СЊ Рє Rigidbody
         _rigidbody.velocity = new Vector2(
             _moveVector.x * _speed * Time.deltaTime,
             _moveVector.y * _speed * Time.deltaTime
         );
 
-        // Управление анимацией движения
+        // РЈРїСЂР°РІР»РµРЅРёРµ Р°РЅРёРјР°С†РёРµР№ РґРІРёР¶РµРЅРёСЏ
         if (_rigidbody.velocity.x != 0 || _rigidbody.velocity.y != 0)
         {
-            // Если персонаж движется - включаем анимацию ходьбы
+            // Р•СЃР»Рё РїРµСЂСЃРѕРЅР°Р¶ РґРІРёР¶РµС‚СЃСЏ - РІРєР»СЋС‡Р°РµРј Р°РЅРёРјР°С†РёСЋ С…РѕРґСЊР±С‹
             _animator.SetFloat(_floatMoveAnimation, 1);
-            Flipx(); // Поворот спрайта по направлению движения
+            Flipx(); // РџРѕРІРѕСЂРѕС‚ СЃРїСЂР°Р№С‚Р° РїРѕ РЅР°РїСЂР°РІР»РµРЅРёСЋ РґРІРёР¶РµРЅРёСЏ
         }
         else
         {
-            // Если персонаж стоит - включаем анимацию покоя
+            // Р•СЃР»Рё РїРµСЂСЃРѕРЅР°Р¶ СЃС‚РѕРёС‚ - РІРєР»СЋС‡Р°РµРј Р°РЅРёРјР°С†РёСЋ РїРѕРєРѕСЏ
             _animator.SetFloat(_floatMoveAnimation, 0);
         }
     }
 
-    // Метод для поворота спрайта персонажа по направлению движения
+    // РњРµС‚РѕРґ РґР»СЏ РїРѕРІРѕСЂРѕС‚Р° СЃРїСЂР°Р№С‚Р° РїРµСЂСЃРѕРЅР°Р¶Р° РїРѕ РЅР°РїСЂР°РІР»РµРЅРёСЋ РґРІРёР¶РµРЅРёСЏ
     private void Flipx()
     {
         if (_moveVector.x > 0)
         {
-            // Движение вправо - обычное отображение
+            // Р”РІРёР¶РµРЅРёРµ РІРїСЂР°РІРѕ - РѕР±С‹С‡РЅРѕРµ РѕС‚РѕР±СЂР°Р¶РµРЅРёРµ
             _spriteRenderer.flipX = false;
         }
         else if (_moveVector.x < 0)
         {
-            // Движение влево - зеркальное отображение
+            // Р”РІРёР¶РµРЅРёРµ РІР»РµРІРѕ - Р·РµСЂРєР°Р»СЊРЅРѕРµ РѕС‚РѕР±СЂР°Р¶РµРЅРёРµ
             _spriteRenderer.flipX = true;
         }
-        // Если движение отсутствует - сохраняем текущее состояние
+        // Р•СЃР»Рё РґРІРёР¶РµРЅРёРµ РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ - СЃРѕС…СЂР°РЅСЏРµРј С‚РµРєСѓС‰РµРµ СЃРѕСЃС‚РѕСЏРЅРёРµ
     }
 
-    // Метод обработки прыжка
+    // РњРµС‚РѕРґ РѕР±СЂР°Р±РѕС‚РєРё РїСЂС‹Р¶РєР°
     private void HandleJump()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            // При нажатии пробела - прыжок
+            // РџСЂРё РЅР°Р¶Р°С‚РёРё РїСЂРѕР±РµР»Р° - РїСЂС‹Р¶РѕРє
             _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, _jumpForce);
-            _animator.SetBool(_boolJumpAnimation, true); // Анимация прыжка
+            _animator.SetBool(_boolJumpAnimation, true); // РђРЅРёРјР°С†РёСЏ РїСЂС‹Р¶РєР°
         }
-        else if (_rigidbody.velocity.y == 0) // Проверка на приземление
+        else if (_rigidbody.velocity.y == 0) // РџСЂРѕРІРµСЂРєР° РЅР° РїСЂРёР·РµРјР»РµРЅРёРµ
         {
-            // Когда персонаж на земле - выключаем анимацию прыжка
+            // РљРѕРіРґР° РїРµСЂСЃРѕРЅР°Р¶ РЅР° Р·РµРјР»Рµ - РІС‹РєР»СЋС‡Р°РµРј Р°РЅРёРјР°С†РёСЋ РїСЂС‹Р¶РєР°
             _animator.SetBool(_boolJumpAnimation, false);
         }
     }
 
-    // Метод обработки получения урона
+    // РњРµС‚РѕРґ РѕР±СЂР°Р±РѕС‚РєРё РїРѕР»СѓС‡РµРЅРёСЏ СѓСЂРѕРЅР°
     private void HandleHurt()
     {
-        // При нажатии H включаем анимацию урона
+        // РџСЂРё РЅР°Р¶Р°С‚РёРё H РІРєР»СЋС‡Р°РµРј Р°РЅРёРјР°С†РёСЋ СѓСЂРѕРЅР°
         if (Input.GetKeyDown(KeyCode.H))
         {
             _animator.SetTrigger(_triggerHurtAnimation);
         }
     }
-    // Метод обработки приседа
+    // РњРµС‚РѕРґ РѕР±СЂР°Р±РѕС‚РєРё РїСЂРёСЃРµРґР°
     private void HandleCrouch()
     {
         if (Input.GetKey(KeyCode.C))
         {
             _animator.SetBool(_boolCrouchAnimation, true);
-            _speed = _crouchSpeed; // Уменьшаем скорость
+            _speed = _crouchSpeed; // РЈРјРµРЅСЊС€Р°РµРј СЃРєРѕСЂРѕСЃС‚СЊ
         }
         else
         {
             _animator.SetBool(_boolCrouchAnimation, false);
-            _speed = 5f; // Возвращаем обычную скорость
+            _speed = 5f; // Р’РѕР·РІСЂР°С‰Р°РµРј РѕР±С‹С‡РЅСѓСЋ СЃРєРѕСЂРѕСЃС‚СЊ
         }
     }
 }
