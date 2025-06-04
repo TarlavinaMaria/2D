@@ -51,7 +51,7 @@ public class PlayerMove : MonoBehaviour
             //_animator.SetBool(Jump, false);
         }
 
-        else if (_rigidbody2D.velocity.x > 0)
+        if (_rigidbody2D.velocity.x > 0)
         {
             transform.Translate(_speed * Time.deltaTime, 0, 0);
             _animator.SetFloat(Speed, 1); // Анимация движение, скорость
@@ -105,4 +105,8 @@ public class PlayerMove : MonoBehaviour
     //{
 
     //}
+    private void Hit()
+    {
+        Debug.Log("Удар");
+    }
 }
