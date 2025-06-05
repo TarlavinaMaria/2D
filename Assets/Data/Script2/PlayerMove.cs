@@ -34,6 +34,7 @@ public class PlayerMove : MonoBehaviour
     private float _derection;
     private bool _isGround = false;
 
+
     private void Awake()
     {
         // Получаем компоненты при старте
@@ -56,7 +57,8 @@ public class PlayerMove : MonoBehaviour
             _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, _jumpForce);
             _animator.SetBool(Jump, true);
             _animator.SetFloat(SpeedUpDown, _rigidbody2D.velocity.y);
-            Flipx();
+
+            Flipx();// Поворот спрайта по направлению движения
         }
         else if (_rigidbody2D.velocity.y < 0)
         {
@@ -67,18 +69,20 @@ public class PlayerMove : MonoBehaviour
         if (_rigidbody2D.velocity.x > 0)
         {
             transform.Translate(_speed * Time.deltaTime, 0, 0);
-            _animator.SetFloat(Speed, 1);
-            Flipx();
+            _animator.SetFloat(Speed, 1); // Анимация движение, скорость
+
+            Flipx(); // Поворот спрайта по направлению движения
         }
         else if (_rigidbody2D.velocity.x < 0)
         {
             transform.Translate(_speed * Time.deltaTime * -1, 0, 0);
-            _animator.SetFloat(Speed, 1);
-            Flipx();
+            _animator.SetFloat(Speed, 1);// Анимация движение, скорость
+
+            Flipx(); // Поворот спрайта по направлению движения
         }
         else
         {
-            _animator.SetFloat(Speed, 0); // Покой
+            _animator.SetFloat(Speed, 0);// Анимация покоя, скорость
         }
 
         // Проверка атаки
@@ -87,14 +91,26 @@ public class PlayerMove : MonoBehaviour
             Attack();
         }
     }
-
-    // Метод для поворота спрайта персонажа в зависимости от направления
+    // Метод для поворота спрайта персонажа по направлению движения
     private void Flipx()
     {
-        _spriteRenderer.flipX = _derection < 0;
-    }
+        if (_derection > 0)
+        {
+            // Движение вправо - обычное отображение
+            _spriteRenderer.flipX = false;
+        }
+        else if (_derection < 0)
+        {
+            // Движение влево - зеркальное отображение
+            _spriteRenderer.flipX = true;
+        }
+        else
+        {
+            _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, _rigidbody2D.velocity.y);
+        }
 
-    // Метод обработки столкновения с землей
+    }
+    // Метод для прыжка (колизия), работает при столкновении колайдером, но только 1 раз
     private void OnCollisionEnter2D()
     {
         _isGround = true;
@@ -102,18 +118,15 @@ public class PlayerMove : MonoBehaviour
         _animator.SetFloat(Speed, 1);
         _animator.SetFloat(SpeedUpDown, 0);
     }
-
     // Метод атаки персонажа
     private void Attack()
     {
         _animator.SetTrigger(AttackAnim); // Запускаем анимацию удара
         Debug.Log("Удар!");
-
         // Определяем направление удара
         Vector2 attackDirection = _spriteRenderer.flipX ? Vector2.left : Vector2.right;
-
         // Создаем луч для проверки попадания удара
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, attackDirection, _attackRange, _enemyLayer);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, attackDirection, _attackRange, LayerMask.GetMask("Enemy"));
 
         if (hit.collider != null)
         {
