@@ -458,6 +458,11 @@ MonoBehaviour:
   _speed: 2
   _jumpForce: 4
   _jumpKeyCode: 32
+  _attackRange: 1
+  _attackKey: 102
+  _enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!61 &1038399948
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -730,7 +735,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1407559216}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8de3e70822c5fd48b1818f6669b8a06, type: 3}
+  m_Script: {fileID: 11500000, guid: b0d88ef264ca9a24daf7bd056c887c28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 3
