@@ -10,10 +10,15 @@ public class PlayerMove : MonoBehaviour
     private const string Speed = nameof(Speed);
     private const string Jump = nameof(Jump);
     private const string SpeedUpDown = nameof(SpeedUpDown);
+    private const string AttackAnim = nameof(Attack);
 
     [SerializeField] private float _speed;
     [SerializeField] private float _jumpForce;
     [SerializeField] private KeyCode _jumpKeyCode;
+
+    [SerializeField] private float _attackRange = 1f;
+    [SerializeField] private KeyCode _attackKey = KeyCode.F;
+    [SerializeField] private LayerMask _enemyLayer;
 
     private Rigidbody2D _rigidbody2D;
     private BoxCollider2D _boxCollider2D;
@@ -21,6 +26,7 @@ public class PlayerMove : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private float _derection;
     private bool _isGround = false;
+
 
     private void Awake()
     {
@@ -69,6 +75,10 @@ public class PlayerMove : MonoBehaviour
         {
             _animator.SetFloat(Speed, 0);// Анимация покоя, скорость
         }
+        if (Input.GetKeyDown(_attackKey))
+        {
+            Attack();
+        }
     }
     // Метод для поворота спрайта персонажа по направлению движения
     private void Flipx()
@@ -105,8 +115,21 @@ public class PlayerMove : MonoBehaviour
     //{
 
     //}
-    private void Hit()
+    private void Attack()
     {
-        Debug.Log("Удар");
+        _animator.SetTrigger(AttackAnim); // Запускаем анимацию удара
+        Debug.Log("Удар!");
+
+        Vector2 attackDirection = _spriteRenderer.flipX ? Vector2.left : Vector2.right;
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, attackDirection, _attackRange, LayerMask.GetMask("Enemy"));
+
+        if (hit.collider != null)
+        {
+            Enemy enemy = hit.collider.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage();
+            }
+        }
     }
 }
