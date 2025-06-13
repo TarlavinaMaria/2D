@@ -24,6 +24,10 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private KeyCode _attackKey = KeyCode.F;
     [SerializeField] private LayerMask _enemyLayer;
 
+    //Система частиц
+    [SerializeField] private ParticleSystem _hit;
+
+
     // Компоненты
     private Rigidbody2D _rigidbody2D;
     private BoxCollider2D _boxCollider2D;
@@ -135,6 +139,26 @@ public class PlayerMove : MonoBehaviour
             if (enemy != null)
             {
                 enemy.TakeDamage();
+
+                // Активируем систему частиц при успешном попадании
+                if (_hit != null)
+                {
+                    // Позиционируем частицы в точке удара
+                    _hit.transform.position = hit.point;
+
+                    // Настраиваем направление частиц в зависимости от направления удара
+                    var main = _hit.main;
+                    if (attackDirection == Vector2.left)
+                    {
+                        main.startRotation = Mathf.PI; // 180 градусов для удара влево
+                    }
+                    else
+                    {
+                        main.startRotation = 0f; // 0 градусов для удара вправо
+                    }
+
+                    _hit.Play(); // Запускаем эффект
+                }
             }
         }
     }

@@ -4,7 +4,7 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private int _health = 3;
     private Animator _animator;
-
+,
     private void Awake()
     {
         // Получаем компонент анимации врага
